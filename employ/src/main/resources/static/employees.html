@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,8 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -15,6 +17,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
     <!-- Header Navigation -->
@@ -29,23 +32,23 @@
                     <small class="text-muted" style="font-size: 0.725rem;">Employee Management System</small>
                 </div>
             </div>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-2 mt-3 mt-lg-0">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link-custom" href="index.html">
                             <i class="bi bi-person-plus-fill"></i> Add Employee
                         </a>
-                    </li>
-                    <li class="nav-item">
+                    </li> -->
+                    <!-- <li class="nav-item">
                         <a class="nav-link-custom active" href="employees.html">
                             <i class="bi bi-table"></i> Employee Directory
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -65,10 +68,11 @@
                     </ol>
                 </nav>
             </div>
-            
+
             <div class="d-flex align-items-center gap-2">
                 <!-- Functionality 4: Get All Details Button -->
-                <button id="getAllBtn" class="btn btn-secondary-custom py-2 px-3" title="Reload all records from server">
+                <button id="getAllBtn" class="btn btn-secondary-custom py-2 px-3"
+                    title="Reload all records from server">
                     <i class="bi bi-arrow-repeat" id="refreshIcon"></i>
                     <span>Get All Details</span>
                 </button>
@@ -133,10 +137,12 @@
                     <label class="small text-muted fw-semibold mb-1 d-block">Search Keyword</label>
                     <div class="position-relative">
                         <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-                        <input type="text" id="searchInput" class="form-control ps-5 pe-5" 
-                               style="height: 44px; border-radius: var(--radius-md);"
-                               placeholder="Type name, email, mobile, location, or ID to search...">
-                        <button type="button" id="clearSearchBtn" class="btn btn-link position-absolute top-50 end-0 translate-middle-y me-2 text-muted p-0 text-decoration-none d-none" title="Clear Search">
+                        <input type="text" id="searchInput" class="form-control ps-5 pe-5"
+                            style="height: 44px; border-radius: var(--radius-md);"
+                            placeholder="Type name, email, mobile, location, or ID to search...">
+                        <button type="button" id="clearSearchBtn"
+                            class="btn btn-link position-absolute top-50 end-0 translate-middle-y me-2 text-muted p-0 text-decoration-none d-none"
+                            title="Clear Search">
                             <i class="bi bi-x-circle-fill fs-5"></i>
                         </button>
                     </div>
@@ -200,7 +206,8 @@
                     <i class="bi bi-folder-x"></i>
                 </div>
                 <h5 class="fw-bold text-dark">No Employee Records Found</h5>
-                <p class="text-muted mb-4" id="emptyStateMsg">There are currently no employee details in the system. Get started by registering one.</p>
+                <p class="text-muted mb-4" id="emptyStateMsg">There are currently no employee details in the system. Get
+                    started by registering one.</p>
                 <div class="d-flex justify-content-center gap-2">
                     <button class="btn btn-secondary-custom" onclick="loadAllEmployees()">
                         <i class="bi bi-arrow-repeat"></i> Reload Records
@@ -219,7 +226,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-lg);">
                 <div class="modal-body p-4 text-center">
-                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger mb-3" style="width: 64px; height: 64px;">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger mb-3"
+                        style="width: 64px; height: 64px;">
                         <i class="bi bi-exclamation-triangle-fill fs-2"></i>
                     </div>
                     <h5 class="fw-bold text-dark mb-2">Delete Employee Record?</h5>
@@ -240,9 +248,11 @@
                         <button type="button" class="btn btn-secondary-custom flex-grow-1" data-bs-dismiss="modal">
                             Cancel
                         </button>
-                        <button type="button" id="confirmDeleteBtn" class="btn btn-danger flex-grow-1 py-2 fw-semibold" style="border-radius: var(--radius-md);">
+                        <button type="button" id="confirmDeleteBtn" class="btn btn-danger flex-grow-1 py-2 fw-semibold"
+                            style="border-radius: var(--radius-md);">
                             <span id="deleteBtnText">Yes, Delete Record</span>
-                            <span id="deleteBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                            <span id="deleteBtnSpinner" class="spinner-border spinner-border-sm d-none"
+                                role="status"></span>
                         </button>
                     </div>
                 </div>
@@ -277,7 +287,7 @@
         const totalLocationsCount = document.getElementById('totalLocationsCount');
         const visibleRecordsCount = document.getElementById('visibleRecordsCount');
         const tableBadgeCount = document.getElementById('tableBadgeCount');
-        
+
         // Search & Refresh elements
         const searchInput = document.getElementById('searchInput');
         const searchType = document.getElementById('searchType');
@@ -315,7 +325,7 @@
             try {
                 const employees = await EmployeeAPI.getAll();
                 allEmployees = Array.isArray(employees) ? employees : [];
-                
+
                 // Clear search inputs
                 searchInput.value = '';
                 clearSearchBtn.classList.add('d-none');
@@ -355,8 +365,8 @@
             if (employees.length === 0) {
                 tableContainer.style.display = 'none';
                 emptyState.style.display = 'block';
-                emptyStateMsg.textContent = searchInput.value.trim() 
-                    ? 'No employees matched your search criteria.' 
+                emptyStateMsg.textContent = searchInput.value.trim()
+                    ? 'No employees matched your search criteria.'
                     : 'There are currently no employee records in the system.';
                 return;
             }
@@ -555,7 +565,7 @@
         /**
          * Functionality 1: Delete Functionality
          */
-        window.triggerDeleteModal = function(id, name) {
+        window.triggerDeleteModal = function (id, name) {
             employeeToDelete = { id, name };
             deleteEmpId.textContent = `#${id}`;
             deleteEmpName.textContent = name;
@@ -573,10 +583,10 @@
                 await EmployeeAPI.delete(employeeToDelete.id);
                 deleteModal.hide();
                 Toast.show(`Employee "${employeeToDelete.name}" (ID #${employeeToDelete.id}) was successfully deleted.`, 'success');
-                
+
                 // Remove from local array
                 allEmployees = allEmployees.filter(e => e.id !== employeeToDelete.id);
-                
+
                 // If search is active, re-filter, else re-render all
                 const query = searchInput.value.trim();
                 if (query) {
@@ -598,4 +608,5 @@
         });
     </script>
 </body>
+
 </html>
