@@ -22,39 +22,37 @@ public class Service implements ServiceInt {
 
 	@Override
 	public Student getById(Long id) {
-		// TODO Auto-generated method stub
-		return repo.getById(id);
+		return repo.findById(id).orElse(null);
 	}
 
 	@Override
 	public Student getByName(String name) {
-		// TODO Auto-generated method stub
-		return repo.getByName(name);
+		List<Student> list = repo.findByNameContainingIgnoreCase(name);
+		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
 
 	@Override
 	public List<Student> getAll() {
-		// TODO Auto-generated method stub
 		return repo.findAll();
 	}
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		repo.deleteById(id);
-		
+		if (repo.existsById(id)) {
+			repo.deleteById(id);
+		}
 	}
 
 	@Override
 	public Student updateDetails(Long id, Student st) {
-		// TODO Auto-generated method stub
-		Student std = repo.getById(id);
-		std.setName(st.getName());
-		std.setMobile(st.getMobile());
-		std.setEmail(st.getEmail());
-		std.setPassword(st.getPassword());
-		std.setLocation(st.getLocation());
-		return repo.save(std);
+		return repo.findById(id).map(existing -> {
+			existing.setName(st.getName());
+			existing.setMobile(st.getMobile());
+			existing.setEmail(st.getEmail());
+			existing.setPassword(st.getPassword());
+			existing.setLocation(st.getLocation());
+			return repo.save(existing);
+		}).orElse(null);
 	}
 
 	@Override

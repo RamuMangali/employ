@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System | All Employee Details</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <div class="brand-badge">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-5 text-dark leading-none">EMS Portal</div>
+                    <small class="text-muted" style="font-size: 0.725rem;">Enterprise Employee Management</small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2 mt-3 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link-custom" href="index.html">
+                            <i class="bi bi-person-plus-fill"></i> Add Employee
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-custom active" href="employees.html">
+                            <i class="bi bi-table"></i> Employee Directory
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container-fluid px-lg-5 py-4">
+
+        <!-- Top Title & Breadcrumbs -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+                <h3 class="fw-bold text-dark mb-1">Employee Directory & Details</h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0 small">
+                        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">All Details</li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <div class="d-flex align-items-center gap-2">
+                <!-- Functionality 4: Get All Details Button -->
+                <button id="getAllBtn" class="btn btn-secondary-custom py-2 px-3" title="Reload all records from server">
+                    <i class="bi bi-arrow-repeat" id="refreshIcon"></i>
+                    <span>Get All Details</span>
+                </button>
+                <a href="index.html" class="btn btn-primary-custom py-2 px-3">
+                    <i class="bi bi-person-plus-fill"></i> Add Employee
+                </a>
+            </div>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold">Total Employees</div>
+                        <div class="fs-4 fw-bold text-dark" id="totalEmployeesCount">0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="stat-card">
+                    <div class="stat-icon success">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold">Active Locations</div>
+                        <div class="fs-4 fw-bold text-dark" id="totalLocationsCount">0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-4">
+                <div class="stat-card">
+                    <div class="stat-icon warning">
+                        <i class="bi bi-funnel-fill"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted small fw-semibold">Visible Records</div>
+                        <div class="fs-4 fw-bold text-dark" id="visibleRecordsCount">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Functionality 2: Search & Filter Toolbar -->
+        <div class="app-card p-3 p-md-4 mb-4">
+            <div class="row g-3 align-items-center">
+                <!-- Search Type Dropdown -->
+                <div class="col-12 col-md-3 col-lg-2">
+                    <label class="small text-muted fw-semibold mb-1 d-block">Search By</label>
+                    <select id="searchType" class="form-select" style="height: 44px; border-radius: var(--radius-md);">
+                        <option value="live">Live Filter (All)</option>
+                        <option value="id">Employee ID</option>
+                        <option value="name">Employee Name</option>
+                    </select>
+                </div>
+
+                <!-- Search Input Field -->
+                <div class="col-12 col-md-6 col-lg-7">
+                    <label class="small text-muted fw-semibold mb-1 d-block">Search Keyword</label>
+                    <div class="position-relative">
+                        <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                        <input type="text" id="searchInput" class="form-control ps-5 pe-5" 
+                               style="height: 44px; border-radius: var(--radius-md);"
+                               placeholder="Type name, email, mobile, location, or ID to search...">
+                        <button type="button" id="clearSearchBtn" class="btn btn-link position-absolute top-50 end-0 translate-middle-y me-2 text-muted p-0 text-decoration-none d-none" title="Clear Search">
+                            <i class="bi bi-x-circle-fill fs-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search Actions -->
+                <div class="col-12 col-md-3 col-lg-3 d-flex gap-2 align-items-end" style="height: 100%;">
+                    <div class="w-100">
+                        <label class="small text-muted fw-semibold mb-1 d-block d-none d-md-block">&nbsp;</label>
+                        <button type="button" id="executeSearchBtn" class="btn btn-primary-custom w-100 py-2">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employee Table Card -->
+        <div class="app-card overflow-hidden">
+            <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-white">
+                <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                    <i class="bi bi-list-task text-primary fs-5"></i>
+                    <span>Employee Records</span>
+                    <span class="badge bg-light text-primary border" id="tableBadgeCount">0 Loaded</span>
+                </div>
+                <div class="text-muted small">
+                    <i class="bi bi-info-circle me-1"></i> Click <b>Edit</b> to update or <b>Delete</b> to remove
+                </div>
+            </div>
+
+            <!-- Loading Spinner Container -->
+            <div id="loadingContainer" class="spinner-container">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading employees...</span>
+                </div>
+                <div class="mt-2 text-muted small fw-semibold">Fetching employee records...</div>
+            </div>
+
+            <!-- Data Table Container -->
+            <div class="table-responsive" id="tableContainer" style="display: none;">
+                <table class="table custom-table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 80px;">ID</th>
+                            <th scope="col">Employee Name</th>
+                            <th scope="col">Mobile Number</th>
+                            <th scope="col">Email Address</th>
+                            <th scope="col">Work Location</th>
+                            <th scope="col" class="text-end" style="width: 140px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                        <!-- Populated via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">
+                    <i class="bi bi-folder-x"></i>
+                </div>
+                <h5 class="fw-bold text-dark">No Employee Records Found</h5>
+                <p class="text-muted mb-4" id="emptyStateMsg">There are currently no employee details in the system. Get started by registering one.</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-secondary-custom" onclick="loadAllEmployees()">
+                        <i class="bi bi-arrow-repeat"></i> Reload Records
+                    </button>
+                    <a href="index.html" class="btn btn-primary-custom">
+                        <i class="bi bi-person-plus-fill"></i> Add New Employee
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Functionality 1: Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-lg);">
+                <div class="modal-body p-4 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger mb-3" style="width: 64px; height: 64px;">
+                        <i class="bi bi-exclamation-triangle-fill fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Delete Employee Record?</h5>
+                    <p class="text-muted mb-3" id="deleteModalBody">
+                        Are you sure you want to delete this employee? This action cannot be reversed.
+                    </p>
+                    <div class="p-3 bg-light rounded-3 text-start mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted small">Employee ID:</span>
+                            <span class="fw-bold text-dark small" id="deleteEmpId">#--</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted small">Employee Name:</span>
+                            <span class="fw-bold text-dark small" id="deleteEmpName">--</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-secondary-custom flex-grow-1" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button type="button" id="confirmDeleteBtn" class="btn btn-danger flex-grow-1 py-2 fw-semibold" style="border-radius: var(--radius-md);">
+                            <span id="deleteBtnText">Yes, Delete Record</span>
+                            <span id="deleteBtnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Employee Management System (EMS). Spring Boot & Full Stack Architecture.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- API and Helpers -->
+    <script src="js/api.js"></script>
+
+    <script>
+        // State variables
+        let allEmployees = [];
+        let employeeToDelete = null;
+
+        // DOM Elements
+        const loadingContainer = document.getElementById('loadingContainer');
+        const tableContainer = document.getElementById('tableContainer');
+        const emptyState = document.getElementById('emptyState');
+        const emptyStateMsg = document.getElementById('emptyStateMsg');
+        const tableBody = document.getElementById('employeeTableBody');
+        const totalEmployeesCount = document.getElementById('totalEmployeesCount');
+        const totalLocationsCount = document.getElementById('totalLocationsCount');
+        const visibleRecordsCount = document.getElementById('visibleRecordsCount');
+        const tableBadgeCount = document.getElementById('tableBadgeCount');
+        
+        // Search & Refresh elements
+        const searchInput = document.getElementById('searchInput');
+        const searchType = document.getElementById('searchType');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const executeSearchBtn = document.getElementById('executeSearchBtn');
+        const getAllBtn = document.getElementById('getAllBtn');
+        const refreshIcon = document.getElementById('refreshIcon');
+
+        // Delete Modal elements
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        const deleteEmpId = document.getElementById('deleteEmpId');
+        const deleteEmpName = document.getElementById('deleteEmpName');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const deleteBtnText = document.getElementById('deleteBtnText');
+        const deleteBtnSpinner = document.getElementById('deleteBtnSpinner');
+
+        // Initial Load on Page Start
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllEmployees();
+        });
+
+        /**
+         * Functionality 4: Get All Details
+         */
+        async function loadAllEmployees(silent = false) {
+            if (!silent) {
+                loadingContainer.style.display = 'block';
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'none';
+            }
+
+            refreshIcon.classList.add('spinner-border', 'spinner-border-sm');
+            refreshIcon.classList.remove('bi', 'bi-arrow-repeat');
+
+            try {
+                const employees = await EmployeeAPI.getAll();
+                allEmployees = Array.isArray(employees) ? employees : [];
+                
+                // Clear search inputs
+                searchInput.value = '';
+                clearSearchBtn.classList.add('d-none');
+
+                renderEmployees(allEmployees);
+                updateStats(allEmployees);
+
+                if (silent) {
+                    Toast.show('All employee records refreshed successfully!', 'success');
+                }
+            } catch (err) {
+                console.error(err);
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'block';
+                emptyStateMsg.textContent = 'Could not load employees from server: ' + err.message;
+                Toast.show('Error fetching employee records: ' + err.message, 'danger');
+            } finally {
+                loadingContainer.style.display = 'none';
+                refreshIcon.classList.remove('spinner-border', 'spinner-border-sm');
+                refreshIcon.classList.add('bi', 'bi-arrow-repeat');
+            }
+        }
+
+        // Bind Get All Details button
+        getAllBtn.addEventListener('click', () => {
+            loadAllEmployees(true);
+        });
+
+        /**
+         * Render employee rows in the table
+         */
+        function renderEmployees(employees) {
+            tableBody.innerHTML = '';
+            visibleRecordsCount.textContent = employees.length;
+            tableBadgeCount.textContent = `${employees.length} Loaded`;
+
+            if (employees.length === 0) {
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'block';
+                emptyStateMsg.textContent = searchInput.value.trim() 
+                    ? 'No employees matched your search criteria.' 
+                    : 'There are currently no employee records in the system.';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            tableContainer.style.display = 'block';
+
+            employees.forEach(emp => {
+                const tr = document.createElement('tr');
+                tr.id = `employee-row-${emp.id}`;
+
+                const initials = UIUtils.getInitials(emp.name);
+                const avatarBg = UIUtils.getAvatarColor(emp.name);
+                const formattedPhone = UIUtils.formatPhone(emp.mobile);
+
+                tr.innerHTML = `
+                    <td>
+                        <span class="id-badge">#${emp.id}</span>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar-circle" style="background: ${avatarBg};">
+                                ${initials}
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark">${UIUtils.escapeHtml(emp.name)}</div>
+                                <small class="text-muted">Emp ID: ${emp.id}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a href="tel:${emp.mobile}" class="text-decoration-none text-dark d-flex align-items-center gap-2">
+                            <i class="bi bi-telephone text-primary"></i>
+                            <span>${formattedPhone}</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="mailto:${emp.email}" class="text-decoration-none text-primary d-flex align-items-center gap-2">
+                            <i class="bi bi-envelope"></i>
+                            <span>${UIUtils.escapeHtml(emp.email)}</span>
+                        </a>
+                    </td>
+                    <td>
+                        <span class="location-badge">
+                            <i class="bi bi-geo-alt-fill text-danger"></i>
+                            <span>${UIUtils.escapeHtml(emp.location || 'N/A')}</span>
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-2">
+                            <!-- Functionality 3: Update Navigation Button -->
+                            <a href="update-employee.html?id=${emp.id}" 
+                               class="btn-action btn-action-edit" 
+                               title="Update Employee Details">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <!-- Functionality 1: Delete Button -->
+                            <button type="button" 
+                                    class="btn-action btn-action-delete" 
+                                    onclick="triggerDeleteModal(${emp.id}, '${UIUtils.escapeHtml(emp.name)}')" 
+                                    title="Delete Employee">
+                                <i class="bi bi-trash3-fill"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                tableBody.appendChild(tr);
+            });
+        }
+
+        /**
+         * Update Summary Statistics
+         */
+        function updateStats(employees) {
+            totalEmployeesCount.textContent = allEmployees.length;
+            const uniqueLocations = new Set(
+                allEmployees
+                    .map(e => (e.location || '').trim().toLowerCase())
+                    .filter(loc => loc.length > 0)
+            );
+            totalLocationsCount.textContent = uniqueLocations.size;
+        }
+
+        /**
+         * Functionality 2: Search Functionality
+         */
+        // Live input typing filter
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim();
+            if (query.length > 0) {
+                clearSearchBtn.classList.remove('d-none');
+            } else {
+                clearSearchBtn.classList.add('d-none');
+            }
+
+            if (searchType.value === 'live') {
+                performLiveSearch(query);
+            }
+        });
+
+        // Clear Search
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearchBtn.classList.add('d-none');
+            renderEmployees(allEmployees);
+            searchInput.focus();
+        });
+
+        // Search Button click or Enter key
+        executeSearchBtn.addEventListener('click', executeSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executeSearch();
+            }
+        });
+
+        async function executeSearch() {
+            const query = searchInput.value.trim();
+            const mode = searchType.value;
+
+            if (!query) {
+                renderEmployees(allEmployees);
+                return;
+            }
+
+            if (mode === 'live') {
+                performLiveSearch(query);
+            } else if (mode === 'id') {
+                // Search by ID via Backend API
+                if (isNaN(query)) {
+                    Toast.show('Please enter a valid numeric Employee ID.', 'warning');
+                    return;
+                }
+                loadingContainer.style.display = 'block';
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'none';
+                try {
+                    const emp = await EmployeeAPI.getById(query);
+                    if (emp && emp.id) {
+                        renderEmployees([emp]);
+                        Toast.show(`Found record for Employee ID #${query}`, 'success');
+                    } else {
+                        renderEmployees([]);
+                        Toast.show(`No employee found with ID #${query}`, 'warning');
+                    }
+                } catch (err) {
+                    renderEmployees([]);
+                    Toast.show(`Employee ID #${query} not found.`, 'warning');
+                } finally {
+                    loadingContainer.style.display = 'none';
+                }
+
+            } else if (mode === 'name') {
+                // Search by Name via Backend API
+                loadingContainer.style.display = 'block';
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'none';
+                try {
+                    const emp = await EmployeeAPI.getByName(query);
+                    if (emp && emp.id) {
+                        renderEmployees([emp]);
+                        Toast.show(`Found record for "${emp.name}"`, 'success');
+                    } else {
+                        // Fallback to local filter if exact name not returned as single object
+                        performLiveSearch(query);
+                    }
+                } catch (err) {
+                    // Fallback to local filter
+                    performLiveSearch(query);
+                } finally {
+                    loadingContainer.style.display = 'none';
+                }
+            }
+        }
+
+        function performLiveSearch(query) {
+            if (!query) {
+                renderEmployees(allEmployees);
+                return;
+            }
+            const q = query.toLowerCase();
+            const filtered = allEmployees.filter(emp => {
+                return (
+                    String(emp.id).includes(q) ||
+                    (emp.name && emp.name.toLowerCase().includes(q)) ||
+                    (emp.email && emp.email.toLowerCase().includes(q)) ||
+                    (emp.mobile && String(emp.mobile).includes(q)) ||
+                    (emp.location && emp.location.toLowerCase().includes(q))
+                );
+            });
+            renderEmployees(filtered);
+        }
+
+        /**
+         * Functionality 1: Delete Functionality
+         */
+        window.triggerDeleteModal = function(id, name) {
+            employeeToDelete = { id, name };
+            deleteEmpId.textContent = `#${id}`;
+            deleteEmpName.textContent = name;
+            deleteModal.show();
+        };
+
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!employeeToDelete) return;
+
+            confirmDeleteBtn.disabled = true;
+            deleteBtnText.textContent = 'Deleting...';
+            deleteBtnSpinner.classList.remove('d-none');
+
+            try {
+                await EmployeeAPI.delete(employeeToDelete.id);
+                deleteModal.hide();
+                Toast.show(`Employee "${employeeToDelete.name}" (ID #${employeeToDelete.id}) was successfully deleted.`, 'success');
+                
+                // Remove from local array
+                allEmployees = allEmployees.filter(e => e.id !== employeeToDelete.id);
+                
+                // If search is active, re-filter, else re-render all
+                const query = searchInput.value.trim();
+                if (query) {
+                    executeSearch();
+                } else {
+                    renderEmployees(allEmployees);
+                }
+                updateStats(allEmployees);
+
+            } catch (err) {
+                console.error(err);
+                Toast.show('Failed to delete employee: ' + err.message, 'danger');
+            } finally {
+                confirmDeleteBtn.disabled = false;
+                deleteBtnText.textContent = 'Yes, Delete Record';
+                deleteBtnSpinner.classList.add('d-none');
+                employeeToDelete = null;
+            }
+        });
+    </script>
+</body>
+</html>

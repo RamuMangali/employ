@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System | Update Employee Details</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <div class="brand-badge">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                    <div class="fw-bold fs-5 text-dark leading-none">EMS Portal</div>
+                    <small class="text-muted" style="font-size: 0.725rem;">Enterprise Employee Management</small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2 mt-3 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link-custom" href="index.html">
+                            <i class="bi bi-person-plus-fill"></i> Add Employee
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-custom active" href="employees.html">
+                            <i class="bi bi-table"></i> Employee Directory
+                        </a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a href="employees.html" class="btn btn-secondary-custom py-2 px-3">
+                            <i class="bi bi-arrow-left"></i> Back to Directory
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+                
+                <!-- Breadcrumbs -->
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb small">
+                        <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item"><a href="employees.html" class="text-decoration-none">Employee Directory</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Update Employee</li>
+                    </ol>
+                </nav>
+
+                <!-- Page Header Title -->
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center p-2 rounded-circle bg-white shadow-sm mb-2" style="width: 56px; height: 56px;">
+                        <i class="bi bi-pencil-square text-primary fs-2"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark">Update Employee Details</h2>
+                    <p class="text-muted">Modify existing employee information and save updates directly to the database.</p>
+                </div>
+
+                <!-- Loading State while fetching existing details -->
+                <div id="loadingCard" class="app-card p-5 text-center">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading details...</span>
+                    </div>
+                    <div class="text-muted fw-semibold">Loading existing employee details...</div>
+                </div>
+
+                <!-- Update Form Card -->
+                <div id="updateCard" class="app-card p-4 p-md-5" style="display: none;">
+                    
+                    <!-- Pre-existing ID Indicator -->
+                    <div class="alert alert-light border d-flex align-items-center justify-content-between p-3 mb-4 rounded-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-person-vcard text-primary fs-4"></i>
+                            <div>
+                                <small class="text-muted d-block">Editing Record</small>
+                                <strong class="text-dark" id="displayEmployeeName">--</strong>
+                            </div>
+                        </div>
+                        <span class="badge bg-primary px-3 py-2 fs-6" id="displayEmployeeId">ID: #--</span>
+                    </div>
+
+                    <form id="updateEmployeeForm" novalidate>
+                        
+                        <div class="form-section-title">
+                            <i class="bi bi-info-circle me-1"></i> Update Personal & Contact Info
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="name" class="custom-form-label">
+                                <i class="bi bi-person text-primary"></i> Full Name <span class="text-danger">*</span>
+                            </label>
+                            <div class="custom-input-group">
+                                <i class="bi bi-person input-icon"></i>
+                                <input type="text" class="form-control form-control-custom" id="name" name="name" 
+                                       placeholder="Enter updated name" required minlength="2">
+                            </div>
+                            <div class="invalid-feedback">Please enter a valid full name.</div>
+                        </div>
+
+                        <!-- Grid: Mobile & Email -->
+                        <div class="row g-3 mb-3">
+                            <!-- Mobile Number -->
+                            <div class="col-md-6">
+                                <label for="mobile" class="custom-form-label">
+                                    <i class="bi bi-telephone text-primary"></i> Mobile Number <span class="text-danger">*</span>
+                                </label>
+                                <div class="custom-input-group">
+                                    <i class="bi bi-telephone input-icon"></i>
+                                    <input type="tel" class="form-control form-control-custom" id="mobile" name="mobile" 
+                                           placeholder="10-digit mobile" required pattern="[0-9]{10}">
+                                </div>
+                                <div class="invalid-feedback">Please enter a valid 10-digit mobile number.</div>
+                            </div>
+
+                            <!-- Email Address -->
+                            <div class="col-md-6">
+                                <label for="email" class="custom-form-label">
+                                    <i class="bi bi-envelope text-primary"></i> Email Address <span class="text-danger">*</span>
+                                </label>
+                                <div class="custom-input-group">
+                                    <i class="bi bi-envelope input-icon"></i>
+                                    <input type="email" class="form-control form-control-custom" id="email" name="email" 
+                                           placeholder="name@company.com" required>
+                                </div>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-section-title mt-4">
+                            <i class="bi bi-shield-lock me-1"></i> Security & Workplace Location
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="custom-form-label">
+                                <i class="bi bi-lock text-primary"></i> Password <span class="text-danger">*</span>
+                            </label>
+                            <div class="custom-input-group">
+                                <i class="bi bi-lock input-icon"></i>
+                                <input type="password" class="form-control form-control-custom" id="password" name="password" 
+                                       placeholder="Enter or update password" required minlength="4">
+                                <button type="button" class="password-toggle-btn" id="togglePasswordBtn" title="Toggle password visibility">
+                                    <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">Password is required (min 4 characters).</div>
+                        </div>
+
+                        <!-- Location / Office -->
+                        <div class="mb-4">
+                            <label for="location" class="custom-form-label">
+                                <i class="bi bi-geo-alt text-primary"></i> Work Location / City <span class="text-danger">*</span>
+                            </label>
+                            <div class="custom-input-group">
+                                <i class="bi bi-geo-alt input-icon"></i>
+                                <input type="text" class="form-control form-control-custom" id="location" name="location" 
+                                       placeholder="Enter updated office location" required>
+                            </div>
+                            <div class="invalid-feedback">Please specify the work location.</div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex flex-column flex-sm-row gap-3 pt-2">
+                            <button type="submit" id="updateBtn" class="btn btn-primary-custom flex-grow-1">
+                                <i class="bi bi-check2-all fs-5"></i>
+                                <span id="btnText">Save Updated Details</span>
+                                <div id="btnSpinner" class="spinner-border spinner-border-sm d-none" role="status">
+                                    <span class="visually-hidden">Saving...</span>
+                                </div>
+                            </button>
+                            <a href="employees.html" class="btn btn-secondary-custom">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Error Container if ID not found -->
+                <div id="errorCard" class="app-card p-5 text-center" style="display: none;">
+                    <div class="empty-state-icon text-danger bg-danger-subtle mb-3">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Employee Not Found</h5>
+                    <p class="text-muted mb-4" id="errorMsg">The requested employee record does not exist or invalid ID was provided.</p>
+                    <a href="employees.html" class="btn btn-primary-custom">
+                        <i class="bi bi-arrow-left"></i> Return to Employee Directory
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Employee Management System (EMS). Spring Boot & Full Stack Architecture.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- API and Helpers -->
+    <script src="js/api.js"></script>
+
+    <script>
+        // Password Visibility Toggle
+        const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+        const passwordInput = document.getElementById('password');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+        togglePasswordBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            togglePasswordIcon.className = isPassword ? 'bi bi-eye-slash' : 'bi bi-eye';
+        });
+
+        // DOM elements
+        const loadingCard = document.getElementById('loadingCard');
+        const updateCard = document.getElementById('updateCard');
+        const errorCard = document.getElementById('errorCard');
+        const errorMsg = document.getElementById('errorMsg');
+        const displayEmployeeName = document.getElementById('displayEmployeeName');
+        const displayEmployeeId = document.getElementById('displayEmployeeId');
+        
+        const nameInput = document.getElementById('name');
+        const mobileInput = document.getElementById('mobile');
+        const emailInput = document.getElementById('email');
+        const locationInput = document.getElementById('location');
+        const form = document.getElementById('updateEmployeeForm');
+        const updateBtn = document.getElementById('updateBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+
+        // Extract ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const employeeId = urlParams.get('id');
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!employeeId) {
+                showError('No employee ID was specified in the request URL.');
+                return;
+            }
+
+            try {
+                // Fetch existing details from backend
+                const employee = await EmployeeAPI.getById(employeeId);
+                if (!employee || !employee.id) {
+                    showError(`Employee record with ID #${employeeId} was not found.`);
+                    return;
+                }
+
+                // Populate Form with existing details
+                displayEmployeeId.textContent = `ID: #${employee.id}`;
+                displayEmployeeName.textContent = employee.name || 'Unnamed Employee';
+                
+                nameInput.value = employee.name || '';
+                mobileInput.value = employee.mobile || '';
+                emailInput.value = employee.email || '';
+                passwordInput.value = employee.password || '';
+                locationInput.value = employee.location || '';
+
+                // Show form card
+                loadingCard.style.display = 'none';
+                updateCard.style.display = 'block';
+
+            } catch (err) {
+                console.error(err);
+                showError(`Failed to load employee details: ${err.message}`);
+            }
+        });
+
+        function showError(message) {
+            loadingCard.style.display = 'none';
+            updateCard.style.display = 'none';
+            errorCard.style.display = 'block';
+            errorMsg.textContent = message;
+        }
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                Toast.show('Please check all input fields.', 'warning');
+                return;
+            }
+
+            const updatedData = {
+                id: parseInt(employeeId, 10),
+                name: nameInput.value.trim(),
+                mobile: parseInt(mobileInput.value.trim(), 10),
+                email: emailInput.value.trim(),
+                password: passwordInput.value,
+                location: locationInput.value.trim()
+            };
+
+            // Loading state
+            updateBtn.disabled = true;
+            btnText.textContent = 'Updating...';
+            btnSpinner.classList.remove('d-none');
+
+            try {
+                await EmployeeAPI.update(employeeId, updatedData);
+                Toast.show(`Employee #${employeeId} details updated successfully! Returning...`, 'success', 2000);
+
+                setTimeout(() => {
+                    window.location.href = 'employees.html';
+                }, 1200);
+
+            } catch (err) {
+                console.error(err);
+                Toast.show(`Update failed: ${err.message}`, 'danger');
+                updateBtn.disabled = false;
+                btnText.textContent = 'Save Updated Details';
+                btnSpinner.classList.add('d-none');
+            }
+        });
+    </script>
+</body>
+</html>
