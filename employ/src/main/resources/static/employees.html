@@ -190,6 +190,7 @@
                             <th scope="col">Employee Name</th>
                             <th scope="col">Mobile Number</th>
                             <th scope="col">Email Address</th>
+                            <th scope="col">Password</th>
                             <th scope="col">Work Location</th>
                             <th scope="col" class="text-end" style="width: 140px;">Actions</th>
                         </tr>
@@ -410,6 +411,18 @@
                         </a>
                     </td>
                     <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="font-monospace text-dark bg-light border px-2 py-1 rounded small" id="pwd-val-${emp.id}">
+                                ${UIUtils.escapeHtml(emp.password || '-')}
+                            </span>
+                            <button type="button" class="btn btn-sm btn-link text-muted p-0 text-decoration-none" 
+                                    onclick="togglePasswordView(${emp.id})" 
+                                    title="Toggle Mask/Show Password">
+                                <i class="bi bi-eye-slash" id="pwd-icon-${emp.id}"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>
                         <span class="location-badge">
                             <i class="bi bi-geo-alt-fill text-danger"></i>
                             <span>${UIUtils.escapeHtml(emp.location || 'N/A')}</span>
@@ -555,12 +568,29 @@
                     String(emp.id).includes(q) ||
                     (emp.name && emp.name.toLowerCase().includes(q)) ||
                     (emp.email && emp.email.toLowerCase().includes(q)) ||
+                    (emp.password && emp.password.toLowerCase().includes(q)) ||
                     (emp.mobile && String(emp.mobile).includes(q)) ||
                     (emp.location && emp.location.toLowerCase().includes(q))
                 );
             });
             renderEmployees(filtered);
         }
+
+        window.togglePasswordView = function (id) {
+            const pwdVal = document.getElementById(`pwd-val-${id}`);
+            const pwdIcon = document.getElementById(`pwd-icon-${id}`);
+            const emp = allEmployees.find(e => e.id == id);
+            if (!emp || !pwdVal || !pwdIcon) return;
+
+            const isVisible = pwdIcon.classList.contains('bi-eye-slash');
+            if (isVisible) {
+                pwdVal.textContent = '••••••••';
+                pwdIcon.className = 'bi bi-eye';
+            } else {
+                pwdVal.textContent = emp.password || '-';
+                pwdIcon.className = 'bi bi-eye-slash';
+            }
+        };
 
         /**
          * Functionality 1: Delete Functionality
